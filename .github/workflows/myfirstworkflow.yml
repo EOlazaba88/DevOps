@@ -2,9 +2,9 @@ name: Publish Docker image
 
 on:
        push:
-            branches: [ "capstone" ]
+            branches: [ "main" ]
        pull_request:
-            branches: [ "capstone" ]
+            branches: [ "main" ]
 
 jobs:
         npm-jobs:
