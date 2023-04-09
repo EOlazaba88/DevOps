@@ -1,20 +1,34 @@
-name: My workspace
+name: Publish Docker image
 
 on:
-  push:
-  pull_request:
-  workflow_dispatch:
+       push:
+            branches: [ "capstone" ]
+       pull_request:
+            branches: [ "capstone" ]
 
 jobs:
-    myfirstjob: 
-              name: First job
-              runs-on: ubuntu-latest
-              steps:
-              - name: Step One
-                uses: actions/checkout@v3
-              - name: Step Two
-                run: |
-                  touch newfile.yaml
-                  echo "Some random text for the example" >> newfile.yaml
-                  cat newfile.yaml
-                  pwd
+        npm-jobs:
+
+            runs-on: ubuntu-latest
+
+            steps:
+                - uses: actions/checkout@v2
+                
+                - name: NPM dependencies 
+                  working-directory: capstone_project/hello-world/src
+                  run: npm install
+                - name: NPM testing 
+                  working-directory: capstone_project/hello-world/src
+                  run: npm test
+                  
+        docker-jobs:
+
+            needs: [npm-jobs]
+            runs-on: ubuntu-latest
+
+            steps:
+                - uses: actions/checkout@v2
+
+                - name: Build container
+                  working-directory: capstone_project/hello-world/
+                  run: docker compose up -d
